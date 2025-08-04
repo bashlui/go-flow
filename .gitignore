@@ -1,0 +1,53 @@
+# Ignore environment and secrets files
+.env
+*.env
+*.key
+*.pem
+
+# Ignore Docker-related files
+docker-compose.override.yml
+*.log
+goflow-data/
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore dependency directories
+node_modules/
+vendor/
+
+# Ignore Go build artifacts
+*.exe
+*.tmp
+*.out
+*.test
+*.so
+*.a
+
+# Ignore IDE/editor-specific files
+.vscode/
+.idea/
+*.iml
+
+# Ignore build or intermediate files
+bin/
+build/
+dist/
+*.o
+*.gdb
+*.dSYM
+*.lock
+
+# Ignore sensitive or temporary config
+config.yaml
+*.sample
+
+# Ignore package manager files
+go.sum
+
+# Ignore other temporary files
+*.swp
+*.~*~
+*.bak
+*~
