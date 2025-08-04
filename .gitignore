@@ -5,7 +5,7 @@
 *.pem
 
 # Ignore Docker-related files
-docker-compose.override.yml
+docker-compose.yml
 *.log
 goflow-data/
 
