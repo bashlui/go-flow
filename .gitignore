@@ -43,8 +43,6 @@ dist/
 config.yaml
 *.sample
 
-# Ignore package manager files
-go.sum
 
 # Ignore other temporary files
 *.swp
