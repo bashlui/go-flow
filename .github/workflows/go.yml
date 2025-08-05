@@ -71,7 +71,7 @@ jobs:
       - name: Run migrations
         run: |
           go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
-          migrate -path db/migrations -database "pgx://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable" up
+          migrate -path db/migrations -database "postgres://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable" up
 
       # Step 6: Run linters for code quality checks
       - name: Run linters
@@ -83,7 +83,7 @@ jobs:
       # Step 7: Run unit and integration tests
       - name: Run tests
         env:
-          DATABASE_URL: "pgx://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable"
+          DATABASE_URL: "postgres://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable"
         run: go test -v ./...
 
       # Step 8: Build the Go application binary
