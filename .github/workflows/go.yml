@@ -70,7 +70,7 @@ jobs:
       # Step 5: Run database migrations to set up the tables
       - name: Run migrations
         run: |
-          go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+          go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
           migrate -path db/migrations -database "pgx://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable" up
 
       # Step 6: Run linters for code quality checks
