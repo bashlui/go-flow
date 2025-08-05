@@ -5,16 +5,26 @@ import (
 	"log"
 	"time"
 
-	"goflow-project/internal/repository"
+	"go-flow/internal/repository"
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	db, err := repository.NewDBConnection(ctx)
+	conn, err := repository.NewDBConnection(ctx)
 	if err != nil {
-		log.Fatalf("failed to connect to database: %v", err)
+		log.Fatalf("Database connection failed: %v", err)
 	}
-	defer db.Close(context.Background())
+	defer conn.Close(ctx)
+
+	// Test a simple query
+	var version string
+	err = conn.QueryRow(ctx, "SELECT version()").Scan(&version)
+	if err != nil {
+		log.Fatalf("Query failed: %v", err)
+	}
+
+	log.Printf("Database version: %s", version)
+	log.Println("Database connection test successful!")
 }
