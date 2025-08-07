@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=goflow_user
+      - POSTGRES_PASSWORD=QbzApkT4K84
+      - POSTGRES_DB=goflow_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - goflow-data:/var/lib/postgresql/data
+
+volumes:
+  goflow-data:

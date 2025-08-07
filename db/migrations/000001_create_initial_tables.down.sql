@@ -1,2 +1,5 @@
-DROP TABLE IF EXISTS news_articles;
 DROP TABLE IF EXISTS stocks;
+DROP TABLE IF EXISTS stock_history;
+DROP TABLE IF EXISTS stock_watchlist;
+DROP TABLE IF EXISTS stock_alerts;
+DROP TABLE IF EXISTS users;
