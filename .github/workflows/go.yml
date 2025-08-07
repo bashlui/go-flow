@@ -38,11 +38,11 @@ jobs:
     steps:
       # Step 1: Check out the repository code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Step 2: Cache Go modules and build cache
       - name: Cache Go modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/go-build
@@ -56,9 +56,16 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '1.23.1'
-          cache: true
 
-      # Step 4: Wait for the PostgreSQL service to be ready
+      # Step 4: Download dependencies
+      - name: Download Go dependencies
+        run: |
+          go clean -modcache
+          go mod download
+          go mod verify
+          go mod tidy
+
+      # Step 5: Wait for the PostgreSQL service to be ready
       - name: Wait for PostgreSQL
         run: |
           for i in `seq 1 10`; do
@@ -67,25 +74,25 @@ jobs:
             sleep 1
           done
 
-      # Step 5: Run database migrations to set up the tables
+      # Step 6: Run database migrations to set up the tables
       - name: Run migrations
         run: |
           go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
           migrate -path db/migrations -database "postgres://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable" up
 
-      # Step 6: Run linters for code quality checks
+      # Step 7: Run linters for code quality checks
       - name: Run linters
         uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.54.2
-          args: --timeout=5m
+          version: v1.55.2
+          args: --timeout=5m --skip-cache
 
-      # Step 7: Run unit and integration tests
+      # Step 8: Run unit and integration tests
       - name: Run tests
         env:
           DATABASE_URL: "postgres://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable"
         run: go test -v ./...
 
-      # Step 8: Build the Go application binary
+      # Step 9: Build the Go application binary
       - name: Build
         run: go build -o goflow-app ./cmd/server
