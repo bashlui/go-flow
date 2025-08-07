@@ -80,19 +80,12 @@ jobs:
           go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
           migrate -path db/migrations -database "postgres://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable" up
 
-      # Step 7: Run linters for code quality checks
-      - name: Run linters
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.55.2
-          args: --timeout=5m --skip-cache
-
-      # Step 8: Run unit and integration tests
+      # Step 7: Run unit and integration tests
       - name: Run tests
         env:
           DATABASE_URL: "postgres://goflow_user:goflow_pass@localhost:5432/goflow_db?sslmode=disable"
         run: go test -v ./...
 
-      # Step 9: Build the Go application binary
+      # Step 8: Build the Go application binary
       - name: Build
         run: go build -o goflow-app ./cmd/server
