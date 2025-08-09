@@ -94,39 +94,6 @@ go-flow/
 
 The API will be available at `http://localhost:8080`
 
-## API Endpoints
-
-### Stock Operations
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/stocks` | Get all stocks from database |
-| `GET` | `/api/stocks/:id` | Get specific stock by ID/Symbol |
-| `POST` | `/api/stocks/fetch/:symbol` | Fetch stock data from Alpha Vantage and store |
-
-### Example Usage
-
-```bash
-# Fetch Apple stock data from Alpha Vantage
-curl -X POST http://localhost:8080/api/stocks/fetch/AAPL
-
-# Get all stored stocks
-curl http://localhost:8080/api/stocks
-
-# Get specific stock
-curl http://localhost:8080/api/stocks/AAPL
-```
-
-## Database Schema
-
-The application uses PostgreSQL with the following main tables:
-
-- **stocks**: Basic stock information (symbol, name, last_price)
-- **stock_history**: Historical price data (OHLCV)
-- **users**: User accounts (planned)
-- **stock_watchlist**: User stock watchlists (planned)
-- **stock_alerts**: Price alerts (planned)
-
 ## Development
 
 ### Available Make Commands
@@ -148,16 +115,6 @@ ALPHA_VANTAGE_API_KEY=your_api_key_here
 PORT=8080
 ```
 
-## Contributing
-
-This project is in early development. Contributions, suggestions, and feedback are welcome!
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## Architecture Notes
 
 ### Design Patterns
@@ -171,24 +128,6 @@ This project is in early development. Contributions, suggestions, and feedback a
 - `repository/`: Database operations and queries
 - `models/`: Data structures and domain models
 
-## Roadmap
-
-- [ ] Complete user authentication system
-- [ ] Implement portfolio tracking
-- [ ] Add real-time WebSocket updates
-- [ ] Integrate additional financial data sources
-- [ ] Add comprehensive testing suite
-- [ ] Implement caching layer (Redis)
-- [ ] Add API rate limiting
-- [ ] Create frontend dashboard
-- [ ] Deploy to cloud platform
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-**Antonio Basilio** - [@bashlui](https://github.com/bashlui)
-
-Project Link: [https://github.com/bashlui/go-flow](https://github.com/bashlui/go-flow)
