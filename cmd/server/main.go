@@ -3,28 +3,61 @@ package main
 import (
 	"context"
 	"log"
-	"time"
+	"os"
 
+	"go-flow/internal/api/handler"
 	"go-flow/internal/repository"
+	"go-flow/internal/service"
+
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	// Load environment variables
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found")
+	}
 
+	// Create database connection
+	ctx := context.Background()
 	conn, err := repository.NewDBConnection(ctx)
 	if err != nil {
-		log.Fatalf("Database connection failed: %v", err)
+		log.Fatal("Failed to connect to database:", err)
 	}
 	defer conn.Close(ctx)
 
-	// Test a simple query
-	var version string
-	err = conn.QueryRow(ctx, "SELECT version()").Scan(&version)
-	if err != nil {
-		log.Fatalf("Query failed: %v", err)
+	// Initialize services
+	avService := service.NewAlphaVantageService(os.Getenv("ALPHA_VANTAGE_API_KEY"))
+
+	// Initialize repository with real database connection
+	stockRepo := repository.NewStockRepository(conn)
+
+	// Initialize handlers
+	stocksHandler := handler.NewStocksHandler(stockRepo, avService)
+
+	// Set up Gin router
+	r := gin.Default()
+
+	// Set up routes
+	api := r.Group("/api")
+	{
+		stocks := api.Group("/stocks")
+		{
+			stocks.GET("", stocksHandler.GetStocks)
+			stocks.GET("/:id", stocksHandler.GetStockByID)
+			stocks.POST("/fetch/:symbol", stocksHandler.FetchStockData)
+		}
 	}
 
-	log.Printf("Database version: %s", version)
-	log.Println("Database connection test successful!")
+	// Start server
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Printf("Server starting on port %s", port)
+	if err := r.Run(":" + port); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
